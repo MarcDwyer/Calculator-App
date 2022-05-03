@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import CalculatorStyles from "./CalculatorStyles";
 
 const calcCells = [
@@ -10,38 +10,59 @@ const calcCells = [
 ];
 const operators = new Set(["+", "-", "÷", "*", "x"]);
 
+const specialChar = new Set(["AC", "+/-", "%", "=", "."]);
+
 export function Calculator() {
-  const [display, setDisplay] = useState<string>("");
+  const [inputs, setInputs] = useState<string[]>([]);
+
+  const display = useMemo(() => {
+    return inputs.join("");
+  }, [inputs]);
 
   const handleClick = (value: string) => {
-    const lastChar = display[display.length - 1];
-    const isOperator = operators.has(value);
+    const lastValue = inputs[inputs.length - 1];
 
-    // Checks to see if adding an operator with no number before it.
-    // As well as checking to see if last character is an operator
-    if (
-      (!display.length && isOperator) ||
-      (isOperator && operators.has(lastChar))
-    ) {
-      return;
+    let inputsCopy = [...inputs];
+
+    const isNumber = Number.isInteger(Number(value));
+
+    const isLastNumber = Number.isInteger(Number(lastValue));
+    if (isNumber) {
+      if (isLastNumber || !inputs.length) {
+        inputsCopy.push(value);
+      } else {
+        inputsCopy[inputsCopy.length - 1] += value;
+      }
+    } else if (operators.has(value) && inputs.length && isLastNumber) {
+      switch (value) {
+        case "x":
+          inputsCopy.push("*");
+          break;
+        default:
+          inputsCopy.push(value);
+      }
+    } else if (specialChar.has(value)) {
+      switch (value) {
+        case "AC":
+          inputsCopy = [];
+          break;
+        case "+/-":
+          if (isLastNumber) {
+            inputsCopy[inputsCopy.length - 1] = `${Number(lastValue) * -1}`;
+          }
+          break;
+        case "=":
+          inputsCopy = [eval(inputsCopy.join(""))];
+          break;
+        case "%":
+        case ".":
+          if (isLastNumber) {
+            inputsCopy[inputsCopy.length - 1] += value;
+          }
+      }
     }
 
-    switch (value) {
-      case "AC":
-        setDisplay("");
-        break;
-      case "+/-":
-        setDisplay((Number(display) * -1).toString());
-        break;
-      case "=":
-        setDisplay(eval(display).toString());
-        break;
-      case "x":
-        setDisplay(display + "*");
-        break;
-      default:
-        setDisplay(display + value);
-    }
+    setInputs(inputsCopy);
   };
 
   return (
