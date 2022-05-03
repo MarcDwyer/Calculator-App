@@ -7,6 +7,7 @@ const Container = styled.div`
   flex-direction: column;
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.25);
+  margin: auto;
 `;
 
 const Display = styled.span`
