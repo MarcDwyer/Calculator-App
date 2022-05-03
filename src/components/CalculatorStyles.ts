@@ -8,6 +8,7 @@ const Container = styled.div`
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.25);
   margin: auto;
+  padding: 15px 15px;
 `;
 
 const Display = styled.span`

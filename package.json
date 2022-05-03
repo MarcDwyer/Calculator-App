@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "@testing-library/react": "^13.1.1",
+    "@types/mathjs": "^9.4.2",
     "@types/styled-components": "^5.1.25",
+    "mathjs": "^10.5.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "styled-components": "^5.3.5"

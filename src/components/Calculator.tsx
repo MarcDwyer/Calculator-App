@@ -1,5 +1,6 @@
 import { Fragment, useMemo, useState } from "react";
 import CalculatorStyles from "./CalculatorStyles";
+import { evaluate } from "mathjs";
 
 const calcCells = [
   ["AC", "+/-", "%", "÷"],
@@ -55,11 +56,17 @@ export function Calculator() {
           }
           break;
         case "=":
-          inputsCopy = [eval(inputsCopy.join(""))];
+          inputsCopy = [evaluate(inputsCopy.join(""))];
           break;
         case "%":
+          if (lastValue !== "%") {
+            inputsCopy[inputsCopy.length - 1] += value;
+          }
+          break;
         case ".":
-          if (isLastNumber) {
+          if (!inputs.length) {
+            inputsCopy.push(value);
+          } else {
             inputsCopy[inputsCopy.length - 1] += value;
           }
       }
@@ -67,6 +74,7 @@ export function Calculator() {
 
     setInputs(inputsCopy);
   };
+  console.log({ inputs });
   return (
     <CalculatorStyles.Container>
       <CalculatorStyles.Display>{inputDisplay}</CalculatorStyles.Display>
