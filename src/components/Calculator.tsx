@@ -29,12 +29,12 @@ export function Calculator() {
     const isLastNumber = Number.isInteger(Number(lastValue));
 
     if (isNumber) {
-      if (isLastNumber) {
+      if (isLastNumber || lastValue === ".") {
         inputsCopy[inputs.length - 1] += value;
       } else {
         inputsCopy.push(value);
       }
-    } else if (operators.has(value) && isLastNumber) {
+    } else if (operators.has(value) && !operators.has(lastValue)) {
       switch (value) {
         case "x":
           inputsCopy.push("*");
@@ -74,7 +74,7 @@ export function Calculator() {
 
     setInputs(inputsCopy);
   };
-  console.log({ inputs });
+
   return (
     <CalculatorStyles.Container>
       <CalculatorStyles.Display>{inputDisplay}</CalculatorStyles.Display>
