@@ -25,10 +25,11 @@ export function Calculator() {
 
     let inputsCopy = [...inputs];
 
-    const isNumber = Number.isInteger(Number(value));
-    const isLastNumber = Number.isInteger(Number(lastValue));
+    const isNumber = !isNaN(Number(value));
+    const isLastNumber = !isNaN(Number(lastValue));
 
     if (isNumber) {
+      console.log({ isLastNumber, lastValue });
       if (isLastNumber || lastValue === ".") {
         inputsCopy[inputs.length - 1] += value;
       } else {
@@ -75,6 +76,7 @@ export function Calculator() {
     setInputs(inputsCopy);
   };
 
+  console.log({ inputs });
   return (
     <CalculatorStyles.Container>
       <CalculatorStyles.Display>{inputDisplay}</CalculatorStyles.Display>
