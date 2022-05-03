@@ -15,7 +15,7 @@ const specialChar = new Set(["AC", "+/-", "%", "=", "."]);
 export function Calculator() {
   const [inputs, setInputs] = useState<string[]>([]);
 
-  const display = useMemo(() => {
+  const inputDisplay = useMemo(() => {
     return inputs.join("");
   }, [inputs]);
 
@@ -25,18 +25,21 @@ export function Calculator() {
     let inputsCopy = [...inputs];
 
     const isNumber = Number.isInteger(Number(value));
-
     const isLastNumber = Number.isInteger(Number(lastValue));
+
     if (isNumber) {
-      if (isLastNumber || !inputs.length) {
-        inputsCopy.push(value);
+      if (isLastNumber) {
+        inputsCopy[inputs.length - 1] += value;
       } else {
-        inputsCopy[inputsCopy.length - 1] += value;
+        inputsCopy.push(value);
       }
-    } else if (operators.has(value) && inputs.length && isLastNumber) {
+    } else if (operators.has(value) && isLastNumber) {
       switch (value) {
         case "x":
           inputsCopy.push("*");
+          break;
+        case "÷":
+          inputsCopy.push("/");
           break;
         default:
           inputsCopy.push(value);
@@ -64,10 +67,9 @@ export function Calculator() {
 
     setInputs(inputsCopy);
   };
-
   return (
     <CalculatorStyles.Container>
-      <CalculatorStyles.Display>{display}</CalculatorStyles.Display>
+      <CalculatorStyles.Display>{inputDisplay}</CalculatorStyles.Display>
       <CalculatorStyles.CellsContainer>
         {calcCells.map((row, rowIndex) => {
           return (
