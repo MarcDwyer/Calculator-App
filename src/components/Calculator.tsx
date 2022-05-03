@@ -29,7 +29,6 @@ export function Calculator() {
     const isLastNumber = !isNaN(Number(lastValue));
 
     if (isNumber) {
-      console.log({ isLastNumber, lastValue });
       if (isLastNumber || lastValue === ".") {
         inputsCopy[inputs.length - 1] += value;
       } else {
@@ -53,6 +52,7 @@ export function Calculator() {
           break;
         case "+/-":
           if (isLastNumber) {
+            console.log({ lastValue });
             inputsCopy[inputsCopy.length - 1] = `${Number(lastValue) * -1}`;
           }
           break;
@@ -65,7 +65,7 @@ export function Calculator() {
           }
           break;
         case ".":
-          if (!inputs.length) {
+          if (!inputs.length || operators.has(lastValue)) {
             inputsCopy.push(value);
           } else {
             inputsCopy[inputsCopy.length - 1] += value;
