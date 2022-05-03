@@ -3,9 +3,10 @@ import styled from "styled-components";
 const Container = styled.div`
   width: 550px;
   height: 750px;
-  border: 1px solid black;
   display: flex;
   flex-direction: column;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
 `;
 
 const Display = styled.span`

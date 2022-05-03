@@ -8,35 +8,39 @@ const calcCells = [
   ["1", "2", "3", "+"],
   ["0", ".", "="],
 ];
-const operators = new Set(["+", "-", "x", "÷", "*"]);
+const operators = new Set(["+", "-", "÷", "*", "x"]);
 
 export function Calculator() {
   const [display, setDisplay] = useState<string>("");
 
   const handleClick = (value: string) => {
-    console.log({ value, display });
-    if (operators.has(display[display.length - 1]) && operators.has(value)) {
+    const lastChar = display[display.length - 1];
+    const isOperator = operators.has(value);
+
+    // Checks to see if adding an operator with no number before it.
+    // As well as checking to see if last character is an operator
+    if (
+      (!display.length && isOperator) ||
+      (isOperator && operators.has(lastChar))
+    ) {
       return;
-    } else if (value === "AC") {
-      setDisplay("");
-    } else if (value === "=") {
-      setDisplay(eval(display).toString());
-    } else if (value === "x") {
-      setDisplay(display + "*");
-    } else if (value === "-") {
-      setDisplay(display + "-");
-    } else if (value === "+") {
-      setDisplay(display + "+");
-    } else if (value === "÷") {
-      setDisplay(display + "/");
-    } else if (value === "%") {
-      setDisplay(display + "%");
-    } else if (value === "+/-") {
-      setDisplay(display * -1);
-    } else if (value === ".") {
-      setDisplay(display + ".");
-    } else {
-      setDisplay(display + value);
+    }
+
+    switch (value) {
+      case "AC":
+        setDisplay("");
+        break;
+      case "+/-":
+        setDisplay((Number(display) * -1).toString());
+        break;
+      case "=":
+        setDisplay(eval(display).toString());
+        break;
+      case "x":
+        setDisplay(display + "*");
+        break;
+      default:
+        setDisplay(display + value);
     }
   };
 
