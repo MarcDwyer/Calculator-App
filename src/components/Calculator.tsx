@@ -11,7 +11,7 @@ const calcCells = [
 ];
 const operators = new Set(["+", "-", "÷", "*", "x"]);
 
-const specialChar = new Set(["AC", "+/-", "%", "=", "."]);
+const specialChar = new Set(["AC", "+/-", "="]);
 
 export function Calculator() {
   const [inputs, setInputs] = useState<string[]>([]);
@@ -52,31 +52,35 @@ export function Calculator() {
           break;
         case "+/-":
           if (isLastNumber) {
-            console.log({ lastValue });
             inputsCopy[inputsCopy.length - 1] = `${Number(lastValue) * -1}`;
           }
           break;
         case "=":
           inputsCopy = [evaluate(inputsCopy.join(""))];
           break;
-        case "%":
-          if (lastValue !== "%") {
-            inputsCopy[inputsCopy.length - 1] += value;
-          }
-          break;
-        case ".":
-          if (!inputs.length || operators.has(lastValue)) {
-            inputsCopy.push(value);
-          } else {
-            inputsCopy[inputsCopy.length - 1] += value;
-          }
+      }
+    } else {
+      const lastSymbol = lastValue ? lastValue[lastValue.length - 1] : "";
+      if (lastSymbol !== value) {
+        switch (value) {
+          case "%":
+            if (!operators.has(value)) {
+              inputsCopy.push(value);
+            }
+            break;
+          case ".":
+            if (!inputsCopy.length || operators.has(value)) {
+              inputsCopy.push(value);
+            } else {
+              inputsCopy[inputsCopy.length - 1] += ".";
+            }
+        }
       }
     }
 
     setInputs(inputsCopy);
   };
 
-  console.log({ inputs });
   return (
     <CalculatorStyles.Container>
       <CalculatorStyles.Display>{inputDisplay}</CalculatorStyles.Display>
