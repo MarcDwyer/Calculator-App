@@ -64,7 +64,7 @@ export function Calculator() {
       if (lastSymbol !== value) {
         switch (value) {
           case "%":
-            if (!operators.has(value)) {
+            if (!operators.has(value) && inputs.length) {
               inputsCopy.push(value);
             }
             break;
@@ -83,7 +83,9 @@ export function Calculator() {
 
   return (
     <CalculatorStyles.Container>
-      <CalculatorStyles.Display>{inputDisplay}</CalculatorStyles.Display>
+      <CalculatorStyles.Display data-testid="input-display">
+        {inputDisplay}
+      </CalculatorStyles.Display>
       <CalculatorStyles.CellsContainer>
         {calcCells.map((row, rowIndex) => {
           return (
@@ -93,6 +95,7 @@ export function Calculator() {
                   <CalculatorStyles.Cell
                     key={`${rowIndex}${cellIndex}`}
                     onClick={() => handleClick(cell)}
+                    data-testid={cell}
                   >
                     <span>{cell}</span>
                   </CalculatorStyles.Cell>
