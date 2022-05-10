@@ -53,12 +53,12 @@ describe("Making sure calculator behaves as we expect it", () => {
     fireEvent.click(screen.getByTestId("%"));
 
     expect(screen.getByTestId("input-display").textContent).toBe("2%");
+  });
 
-    fireEvent.click(screen.getByTestId("AC"));
+  it("If inputs is empty and user enters % it should be ignored", () => {
+    render(<Calculator />);
 
     fireEvent.click(screen.getByTestId("%"));
-    fireEvent.click(screen.getByTestId("%"));
-
     expect(screen.getByTestId("input-display").textContent).toBe("");
   });
 });
